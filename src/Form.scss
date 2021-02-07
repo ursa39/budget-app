@@ -1,0 +1,18 @@
+.budget-form {
+  display: flex;
+  align-items: center;
+  height: 45px;
+
+  &__date {
+    height: 100%;
+  }
+  &__price {
+    height: 100%;
+  }
+  &__desc {
+    height: 100%;
+  }
+  &__submit {
+    display: none !important;
+  }
+}

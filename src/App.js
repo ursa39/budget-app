@@ -1,23 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import Form from './Form';
+import BudgetList from './BudgetList';
+import PriceSum from './PriceSum';
+import { useState } from 'react';
 
 function App() {
+  const [ list, setList ] = useState([]); 
+  const listState = {
+    list,
+    setList
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <h1>Budget</h1>
+      <BudgetList listState={listState}></BudgetList>
+      <Form listState={listState} ></Form>
+      <PriceSum listState={listState} ></PriceSum>
     </div>
   );
 }
