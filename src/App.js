@@ -1,22 +1,13 @@
 import './App.scss';
-import Form from './Form';
-import BudgetList from './BudgetList';
-import PriceSum from './PriceSum';
-import { useState } from 'react';
+import Form from './app/Form';
+import CurrentList from './features/current/CurrentList';
 
-function App() {
-  const [ list, setList ] = useState([]); 
-  const listState = {
-    list,
-    setList
-  }
-
+function App() {  
   return (
     <div className="app">
       <h1>Budget</h1>
-      <BudgetList listState={listState}></BudgetList>
-      <Form listState={listState} ></Form>
-      <PriceSum listState={listState} ></PriceSum>
+      <Form ></Form>
+      <CurrentList></CurrentList>
     </div>
   );
 }

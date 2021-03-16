@@ -3,14 +3,24 @@
   align-items: center;
   height: 45px;
 
-  &__date {
+  &__date,
+  &__price,
+  &__desc,
+  &__category {
     height: 100%;
+  }
+  &__date {
+    width: 160px;
   }
   &__price {
-    height: 100%;
+    width: 80px;
   }
   &__desc {
-    height: 100%;
+    min-width: 170px;
+    flex: 1;
+  }
+  &__category {
+    width: 170px;
   }
   &__submit {
     display: none !important;

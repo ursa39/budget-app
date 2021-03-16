@@ -1,10 +1,14 @@
 import { useState, useRef } from "react";
 import { DateTime } from "luxon";
+import { useDispatch } from "react-redux";
+import { currentAdded, currentSaved } from "../features/current/currentSlice";
+import { categoryList } from './categoryList';
 
 // styles
 import "./Form.scss";
 
 function Form(props) {
+  const dispatch = useDispatch();
   const [inputDate, setInputDate] = useState(
     DateTime.local().toFormat("yyyy-MM-dd")
   );
@@ -17,6 +21,11 @@ function Form(props) {
     setInputPrice(e.target.value);
   };
 
+  const [inputCategory, setInputCategory] = useState("noCategory");
+  const handleCategoryChange = (e) => {
+    setInputCategory(e.target.value);
+  };
+
   const [inputDesc, setInputDesc] = useState("");
   const handleDescChange = (e) => {
     setInputDesc(e.target.value);
@@ -24,23 +33,31 @@ function Form(props) {
 
   const resetInputValue = () => {
     setInputDate(DateTime.local().toFormat("yyyy-MM-dd"));
-    setInputPrice('');
-    setInputDesc('');
-  }
+    setInputPrice("");
+    setInputDesc("");
+    setInputCategory("");
+  };
 
   const dateInputEl = useRef(null);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     resetInputValue();
-    const newList = [...props.listState.list];
-    newList.push({
-      inputDate,
-      inputPrice,
-      inputDesc
-    });
-    props.listState.setList(newList);
+    dispatch(
+      currentAdded({
+        date: inputDate,
+        price: inputPrice,
+        category: inputCategory,
+        desc: inputDesc,
+      })
+    );
+    dispatch(currentSaved());
     dateInputEl.current.focus();
-  }
+  };
+
+  const categoryOptions = categoryList.map(category => {
+    return <option value={category.value} key={category.value}>{category.name}</option>;
+  });
 
   return (
     <form className="budget-form" onSubmit={handleSubmit}>
@@ -58,6 +75,9 @@ function Form(props) {
         value={inputPrice}
         onChange={handlePriceChange}
       ></input>
+      <select className="budget-form__category" value={inputCategory} onChange={handleCategoryChange}>
+        {categoryOptions}
+      </select>
       <input
         className="budget-form__desc"
         type="text"
