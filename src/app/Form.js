@@ -3,6 +3,7 @@ import { DateTime } from "luxon";
 import { useDispatch } from "react-redux";
 import { currentAdded, currentSaved } from "../features/current/currentSlice";
 import { categoryList } from './categoryList';
+import { nanoid } from 'nanoid'
 
 // styles
 import "./Form.scss";
@@ -45,6 +46,7 @@ function Form(props) {
     resetInputValue();
     dispatch(
       currentAdded({
+        id: nanoid(),
         date: inputDate,
         price: inputPrice,
         category: inputCategory,

@@ -2,13 +2,17 @@ import { Fragment } from "react";
 import { DateTime } from "luxon";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { categoryList } from '../../app/categoryList';
+import { useDispatch } from "react-redux";
+import { currentDeleted, currentSaved } from "./currentSlice";
+import { categoryList } from "../../app/categoryList";
+import deleteIcon from "../../icons/icon-delete.svg";
 
 // styles
 import "./CurrentList.scss";
 
 function CurrentList(props) {
-  const [currentCategory, setCurrentCategory] = useState('all');
+  const dispatch = useDispatch();
+  const [currentCategory, setCurrentCategory] = useState("all");
 
   const categoryFilter = (items) => {
     if (currentCategory === "all") return items;
@@ -22,9 +26,17 @@ function CurrentList(props) {
     setCurrentCategory(e.target.value);
   };
 
+  const handleDelete = (id) => {
+    dispatch(currentDeleted(id));
+    dispatch(currentSaved());
+
+  }
+
   const items = list.map((item, index) => {
     const date = DateTime.fromFormat(item.date, "yyyy-MM-dd").toFormat("MM/dd");
-    const category = categoryList.find(category => category.value === item.category);
+    const category = categoryList.find(
+      (category) => category.value === item.category
+    );
     return (
       <li className="budget-list__item" key={index}>
         <span className="budget-list__date">{date}</span>
@@ -35,6 +47,9 @@ function CurrentList(props) {
         <span className={`budget-list__category ${item.category}`}>
           {category.name}
         </span>
+        <span className="budget-list__delete" onClick={() => handleDelete(item.id)}>
+          <img src={deleteIcon} alt="delete"></img>
+        </span>
       </li>
     );
   });
@@ -43,8 +58,16 @@ function CurrentList(props) {
     return acc + parseInt(val.price);
   }, 0);
 
-  const categoryOptions = categoryList.map(category => {
-    return <option className="budget-category__option" value={category.value} key={category.value}>{category.name}</option>;
+  const categoryOptions = categoryList.map((category) => {
+    return (
+      <option
+        className="budget-category__option"
+        value={category.value}
+        key={category.value}
+      >
+        {category.name}
+      </option>
+    );
   });
 
   return (
@@ -60,7 +83,7 @@ function CurrentList(props) {
           <option className="budget-category__option" value="all">
             全てのカテゴリー
           </option>
-          { categoryOptions }
+          {categoryOptions}
         </select>
       </div>
       <ul className="budget-list__body">{items}</ul>
