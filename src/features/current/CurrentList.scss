@@ -17,6 +17,8 @@
     list-style-type: none;
     padding: 0 10px;
     margin: 0;
+    overflow: auto;
+    height: 480px;
   }
   &__item {
     padding: 5px 0;
@@ -39,7 +41,7 @@
   }
   &__category {
     display: inline-block;
-    margin-left: auto;
+    margin-left: 10px;
     font-size: 0.8em;
     background: #f0f0f0;
     border-radius: 3px;
@@ -51,6 +53,12 @@
   }
   &__desc {
     padding-left: 20px;
+    margin-right: auto;
+  }
+  &__payment {
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
   }
   &__delete {
     width: 20px;
@@ -77,10 +85,11 @@
   }
 }
 
-.budget-category {
+.budget-category,
+.budget-payment {
   &__select {
     display: inline-block;
-    margin: 0;
+    margin: 0 0 0 10px;
     background: #f0f0f0;
     color: #444;
     font-size: 0.8em;

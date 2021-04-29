@@ -8,7 +8,7 @@ const currentSlice = createSlice({
   reducers: {
     currentAdded(state, action) {
       const currentRecord = action.payload;
-      state.unshift(currentRecord);
+      state.push(currentRecord);
       state.sort((a, b) => {
         return a.date > b.date ? -1 : 1;
       });

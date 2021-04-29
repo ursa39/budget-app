@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { currentDeleted, currentSaved } from "./currentSlice";
 import { categoryList } from "../../app/categoryList";
 import deleteIcon from "../../icons/icon-delete.svg";
+import creditcardIcon from "../../icons/icon-creditcard.svg";
 
 // styles
 import "./CurrentList.scss";
@@ -13,6 +14,7 @@ import "./CurrentList.scss";
 function CurrentList(props) {
   const dispatch = useDispatch();
   const [currentCategory, setCurrentCategory] = useState("all");
+  const [currentPayment, setcurrentPayment] = useState("all");
 
   const categoryFilter = (items) => {
     if (currentCategory === "all") return items;
@@ -20,11 +22,21 @@ function CurrentList(props) {
       return item.category === currentCategory;
     });
   };
-  const list = categoryFilter(useSelector((state) => state.current));
+  const paymentFilter = (items) => {
+    if (currentPayment === "all") return items;
+    return items.filter((item) => {
+      return item.pay === currentPayment;
+    });
+  };
+  const list = paymentFilter(categoryFilter(useSelector((state) => state.current)));
 
   const handleCategoryChange = (e) => {
     setCurrentCategory(e.target.value);
   };
+
+  const handlePaymentChange = (e) => {
+    setcurrentPayment(e.target.value);
+  }
 
   const handleDelete = (id) => {
     dispatch(currentDeleted(id));
@@ -37,6 +49,9 @@ function CurrentList(props) {
     const category = categoryList.find(
       (category) => category.value === item.category
     );
+    const creditIconElement = item.pay === 'credit' 
+      ? <img className="budget-list__payment" src={creditcardIcon} alt="creditcard"></img>
+      : '';
     return (
       <li className="budget-list__item" key={index}>
         <span className="budget-list__date">{date}</span>
@@ -44,6 +59,7 @@ function CurrentList(props) {
           ¥{parseInt(item.price).toLocaleString()}
         </span>
         <span className="budget-list__desc">{item.desc}</span>
+        {creditIconElement}
         <span className={`budget-list__category ${item.category}`}>
           {category.name}
         </span>
@@ -74,7 +90,21 @@ function CurrentList(props) {
     <Fragment>
       <div className="budget-list__header">
         <span className="price-sum">合計: ¥{priceSum.toLocaleString()}</span>
-        カテゴリーを選択：
+        <select
+          className={`budget-payment__select ${currentPayment}`}
+          value={currentPayment}
+          onChange={handlePaymentChange}
+        >
+          <option className="budget-payment__option" value="all">
+            全ての支払い方法
+          </option>
+          <option className="budget-payment__option" value="credit">
+            クレジット
+          </option>
+          <option className="budget-payment__option" value="cash">
+            現金
+          </option>
+        </select>
         <select
           className={`budget-category__select ${currentCategory}`}
           value={currentCategory}
