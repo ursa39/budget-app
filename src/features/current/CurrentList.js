@@ -15,6 +15,7 @@ function CurrentList(props) {
   const dispatch = useDispatch();
   const [currentCategory, setCurrentCategory] = useState("all");
   const [currentPayment, setcurrentPayment] = useState("all");
+  const [sharedOnly, setsharedOnly] = useState(false);
 
   const categoryFilter = (items) => {
     if (currentCategory === "all") return items;
@@ -28,7 +29,13 @@ function CurrentList(props) {
       return item.pay === currentPayment;
     });
   };
-  const list = paymentFilter(categoryFilter(useSelector((state) => state.current)));
+
+  const sharedFilter = (items) => {
+    if (!sharedOnly) return items;
+    return items.filter((item) => item.shared);
+  }
+
+  const list = sharedFilter(paymentFilter(categoryFilter(useSelector((state) => state.current))));
 
   const handleCategoryChange = (e) => {
     setCurrentCategory(e.target.value);
@@ -41,7 +48,10 @@ function CurrentList(props) {
   const handleDelete = (id) => {
     dispatch(currentDeleted(id));
     dispatch(currentSaved());
+  }
 
+  const handleShared = (e) => {
+    setsharedOnly(e.target.checked);
   }
 
   const items = list.map((item, index) => {
@@ -90,6 +100,7 @@ function CurrentList(props) {
     <Fragment>
       <div className="budget-list__header">
         <span className="price-sum">合計: ¥{priceSum.toLocaleString()}</span>
+        <span className="shared-only">共同支出のみ<input type="checkbox" checked={sharedOnly} onChange={handleShared}></input></span>
         <select
           className={`budget-payment__select ${currentPayment}`}
           value={currentPayment}

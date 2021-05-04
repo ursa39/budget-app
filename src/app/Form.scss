@@ -20,7 +20,21 @@
     flex: 1;
   }
   &__category {
-    width: 170px;
+    width: 120px;
+  }
+  &__shared,
+  &__payment {
+    font-size: 14px;
+  }
+  &__shared {
+    align-self: flex-start;
+  }
+  &__payment {
+    width: 100px;
+
+    label {
+      margin-bottom: 0;
+    }
   }
   &__submit {
     display: none !important;
