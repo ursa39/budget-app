@@ -37,6 +37,11 @@ function Form(props) {
     setInputPayment(e.target.value);
   };
 
+  const [inputShared, setIinputShared] = useState(false);
+  const handleSharedChange = (e) => {
+    setIinputShared(e.target.checked);
+  };
+
   const resetInputValue = () => {
     setInputDate(DateTime.local().toFormat("yyyy-MM-dd"));
     setInputPrice("");
@@ -57,6 +62,7 @@ function Form(props) {
         category: inputCategory,
         desc: inputDesc,
         pay: inputPayment,
+        shared: inputShared
       })
     );
     dispatch(currentSaved());
@@ -102,6 +108,10 @@ function Form(props) {
       <div className="budget-form__payment">
         <label><input defaultChecked className="budget-form__radio" name="payment" type="radio" value="credit" onChange={handlePaymentChange} />クレジット</label>
         <label><input className="budget-form__radio" name="payment" type="radio" value="cash" onChange={handlePaymentChange} />現金</label>
+      </div>
+      <div className="budget-form__shared">
+        <input type="checkbox" checked={inputShared} onChange={handleSharedChange}></input>
+        共同支出
       </div>
     </form>
   );
