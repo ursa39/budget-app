@@ -7,6 +7,7 @@ import { currentDeleted, currentSaved } from "./currentSlice";
 import { categoryList } from "../../app/categoryList";
 import deleteIcon from "../../icons/icon-delete.svg";
 import creditcardIcon from "../../icons/icon-creditcard.svg";
+import sharedIcon from "../../icons/shared.png";
 
 // styles
 import "./CurrentList.scss";
@@ -62,6 +63,10 @@ function CurrentList(props) {
     const creditIconElement = item.pay === 'credit' 
       ? <img className="budget-list__payment" src={creditcardIcon} alt="creditcard"></img>
       : '';
+
+    const sharedIconElement = item.shared
+      ? <img className="budget-list__shared" src={sharedIcon} alt="sharedIcon"></img>
+      : '';
     return (
       <li className="budget-list__item" key={index}>
         <span className="budget-list__date">{date}</span>
@@ -69,6 +74,7 @@ function CurrentList(props) {
           ¥{parseInt(item.price).toLocaleString()}
         </span>
         <span className="budget-list__desc">{item.desc}</span>
+        {sharedIconElement}
         {creditIconElement}
         <span className={`budget-list__category ${item.category}`}>
           {category.name}
