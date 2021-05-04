@@ -14,8 +14,8 @@ import "./CurrentList.scss";
 function CurrentList(props) {
   const dispatch = useDispatch();
   const [currentCategory, setCurrentCategory] = useState("all");
-  const [currentPayment, setcurrentPayment] = useState("all");
-  const [sharedOnly, setsharedOnly] = useState(false);
+  const [currentPayment, setCurrentPayment] = useState("all");
+  const [sharedOnly, setSharedOnly] = useState(false);
 
   const categoryFilter = (items) => {
     if (currentCategory === "all") return items;
@@ -42,7 +42,7 @@ function CurrentList(props) {
   };
 
   const handlePaymentChange = (e) => {
-    setcurrentPayment(e.target.value);
+    setCurrentPayment(e.target.value);
   }
 
   const handleDelete = (id) => {
@@ -51,7 +51,7 @@ function CurrentList(props) {
   }
 
   const handleShared = (e) => {
-    setsharedOnly(e.target.checked);
+    setSharedOnly(e.target.checked);
   }
 
   const items = list.map((item, index) => {
