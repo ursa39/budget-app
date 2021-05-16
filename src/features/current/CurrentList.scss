@@ -26,8 +26,12 @@
     list-style-type: none;
     padding: 0 10px;
     margin: 0;
-    overflow: auto;
     height: 480px;
+    overflow: auto;
+
+    &::-webkit-scrollbar  {
+      display: none;
+    }
   }
   &__item {
     padding: 5px 0;
