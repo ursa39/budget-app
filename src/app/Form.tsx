@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { DateTime } from "luxon";
 import { useDispatch } from "react-redux";
 import { currentAdded, currentSaved } from "../features/current/currentSlice";
@@ -8,37 +8,37 @@ import { nanoid } from 'nanoid'
 // styles
 import "./Form.scss";
 
-function Form(props) {
+const Form: React.FC = () => {
   const dispatch = useDispatch();
   const [inputDate, setInputDate] = useState(
     DateTime.local().toFormat("yyyy-MM-dd")
   );
-  const handleDateChange = (e) => {
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputDate(e.target.value);
   };
 
   const [inputPrice, setInputPrice] = useState("");
-  const handlePriceChange = (e) => {
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputPrice(e.target.value);
   };
 
   const [inputCategory, setInputCategory] = useState("noCategory");
-  const handleCategoryChange = (e) => {
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setInputCategory(e.target.value);
   };
 
   const [inputDesc, setInputDesc] = useState("");
-  const handleDescChange = (e) => {
+  const handleDescChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputDesc(e.target.value);
   };
 
   const [inputPayment, setInputPayment] = useState("credit");
-  const handlePaymentChange = (e) => {
+  const handlePaymentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputPayment(e.target.value);
   };
 
   const [inputShared, setIinputShared] = useState(false);
-  const handleSharedChange = (e) => {
+  const handleSharedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIinputShared(e.target.checked);
   };
 
@@ -49,10 +49,10 @@ function Form(props) {
     setInputCategory("");
   };
 
-  const dateInputEl = useRef(null);
+  const dateInputEl = useRef<HTMLInputElement | null>(null);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     resetInputValue();
     dispatch(
       currentAdded({
@@ -65,8 +65,8 @@ function Form(props) {
         shared: inputShared
       })
     );
-    dispatch(currentSaved());
-    dateInputEl.current.focus();
+    dispatch(currentSaved(null));
+    dateInputEl.current!.focus();
   };
 
   const categoryOptions = categoryList.map(category => {

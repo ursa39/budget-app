@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { Record } from '../../app/types/Record';
 
-const initialState = JSON.parse(localStorage.getItem('currentList')) || [];
+const savedList = localStorage.getItem('currentList') || '';
+const initialState = JSON.parse(savedList) || [];
 
 const currentSlice = createSlice({
   name: 'current',
@@ -9,7 +11,7 @@ const currentSlice = createSlice({
     currentAdded(state, action) {
       const currentRecord = action.payload;
       state.push(currentRecord);
-      state.sort((a, b) => {
+      state.sort((a: Record, b: Record) => {
         return a.date > b.date ? -1 : 1;
       });
     },
@@ -17,7 +19,7 @@ const currentSlice = createSlice({
       localStorage.setItem('currentList', JSON.stringify(state));
     },
     currentDeleted(state, action) {
-      const deleteTargetIndex = state.findIndex(item => item.id === action.payload);
+      const deleteTargetIndex = state.findIndex((item: Record) => item.id === action.payload);
       state.splice(deleteTargetIndex, 1);
     }
   },
