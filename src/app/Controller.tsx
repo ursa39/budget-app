@@ -1,6 +1,12 @@
 import './controller.scss';
 import { useSelector } from "react-redux";
 
+import { StoreState } from './store';
+
+declare module 'react-redux' {
+  interface DefaultRootState extends StoreState {}
+}
+
 function Controller() {
 
   const list = useSelector((state) => state.current);

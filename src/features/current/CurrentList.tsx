@@ -8,50 +8,56 @@ import { categoryList } from "../../app/categoryList";
 import deleteIcon from "../../icons/icon-delete.svg";
 import creditcardIcon from "../../icons/icon-creditcard.svg";
 import sharedIcon from "../../icons/shared.png";
+import { Record } from '../../app/types/Record';
+import "./CurrentList.scss";
+import { StoreState } from '../../app/store';
+
+declare module 'react-redux' {
+  interface DefaultRootState extends StoreState {}
+}
 
 // styles
-import "./CurrentList.scss";
 
-function CurrentList(props) {
+function CurrentList() {
   const dispatch = useDispatch();
   const [currentCategory, setCurrentCategory] = useState("all");
   const [currentPayment, setCurrentPayment] = useState("all");
   const [sharedOnly, setSharedOnly] = useState(false);
 
-  const categoryFilter = (items) => {
+  const categoryFilter = (items: Record[]) => {
     if (currentCategory === "all") return items;
     return items.filter((item) => {
       return item.category === currentCategory;
     });
   };
-  const paymentFilter = (items) => {
+  const paymentFilter = (items: Record[]) => {
     if (currentPayment === "all") return items;
     return items.filter((item) => {
       return item.pay === currentPayment;
     });
   };
 
-  const sharedFilter = (items) => {
+  const sharedFilter = (items: Record[]) => {
     if (!sharedOnly) return items;
     return items.filter((item) => item.shared);
   }
 
   const list = sharedFilter(paymentFilter(categoryFilter(useSelector((state) => state.current))));
 
-  const handleCategoryChange = (e) => {
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setCurrentCategory(e.target.value);
   };
 
-  const handlePaymentChange = (e) => {
+  const handlePaymentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setCurrentPayment(e.target.value);
   }
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: string) => {
     dispatch(currentDeleted(id));
-    dispatch(currentSaved());
+    dispatch(currentSaved(null));
   }
 
-  const handleShared = (e) => {
+  const handleShared = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSharedOnly(e.target.checked);
   }
 
@@ -77,7 +83,7 @@ function CurrentList(props) {
         {sharedIconElement}
         {creditIconElement}
         <span className={`budget-list__category ${item.category}`}>
-          {category.name}
+          {category!.name}
         </span>
         <span className="budget-list__delete" onClick={() => handleDelete(item.id)}>
           <img src={deleteIcon} alt="delete"></img>
