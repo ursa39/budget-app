@@ -22,6 +22,7 @@ function CurrentList() {
   const dispatch = useDispatch();
   const [currentCategory, setCurrentCategory] = useState("all");
   const [currentPayment, setCurrentPayment] = useState("all");
+  const [currentPayer, setCurrentPayer] = useState("all");
   const [sharedOnly, setSharedOnly] = useState(false);
 
   const categoryFilter = (items: Record[]) => {
@@ -36,13 +37,19 @@ function CurrentList() {
       return item.pay === currentPayment;
     });
   };
+  const payerFilter = (items: Record[]) => {
+    if (currentPayer === "all") return items;
+    return items.filter((item) => {
+      return item.payer === currentPayer;
+    });
+  };
 
   const sharedFilter = (items: Record[]) => {
     if (!sharedOnly) return items;
     return items.filter((item) => item.shared);
   }
 
-  const list = sharedFilter(paymentFilter(categoryFilter(useSelector((state) => state.current))));
+  const list = payerFilter(sharedFilter(paymentFilter(categoryFilter(useSelector((state) => state.current)))));
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setCurrentCategory(e.target.value);
@@ -50,6 +57,10 @@ function CurrentList() {
 
   const handlePaymentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setCurrentPayment(e.target.value);
+  }
+
+  const handlePayerChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setCurrentPayer(e.target.value);
   }
 
   const handleDelete = (id: string) => {
@@ -113,6 +124,21 @@ function CurrentList() {
       <div className="budget-list__header">
         <span className="price-sum">合計: ¥{priceSum.toLocaleString()}</span>
         <span className="shared-only">共同支出のみ<input type="checkbox" checked={sharedOnly} onChange={handleShared}></input></span>
+        <select
+          className={`budget-payer__select ${currentPayer}`}
+          value={currentPayer}
+          onChange={handlePayerChange}
+        >
+          <option className="budget-payer__option" value="all">
+            全ての支払人
+          </option>
+          <option className="budget-payer__option" value="person1">
+            Person1
+          </option>
+          <option className="budget-payer__option" value="person2">
+            Person2
+          </option>
+        </select>
         <select
           className={`budget-payment__select ${currentPayment}`}
           value={currentPayment}

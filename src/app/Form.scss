@@ -1,13 +1,22 @@
 .budget-form {
-  display: flex;
-  align-items: center;
-  height: 45px;
-
+  padding: 10px;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, .1);
+  
+  &__row {
+    display: flex;
+    align-items: center;
+    
+    & + & {
+      margin-top: 10px;
+    }
+  }
   &__date,
   &__price,
   &__desc,
-  &__category {
-    height: 100%;
+  &__category,
+  &__payer  {
+    height: 45px;
+    margin-bottom: 0;
   }
   &__date {
     width: 160px;

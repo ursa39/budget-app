@@ -3,6 +3,10 @@
 }
 body {
   color: #282c34;
+
+  @media (prefers-color-scheme: dark) {
+    color: #efefef;
+  }
 }
 header {
   background: #20232a;

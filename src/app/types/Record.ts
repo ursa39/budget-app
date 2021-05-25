@@ -6,4 +6,5 @@ export type Record = {
   desc: string;
   pay: string;
   shared: boolean;
+  payer: string;
 }

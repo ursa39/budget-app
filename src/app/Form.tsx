@@ -27,6 +27,11 @@ const Form: React.FC = () => {
     setInputCategory(e.target.value);
   };
 
+  const [inputPayer, setInputPayer] = useState("person1");
+  const handlePayerChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setInputPayer(e.target.value);
+  };
+
   const [inputDesc, setInputDesc] = useState("");
   const handleDescChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputDesc(e.target.value);
@@ -47,6 +52,7 @@ const Form: React.FC = () => {
     setInputPrice("");
     setInputDesc("");
     setInputCategory("");
+    setInputPayer("");
   };
 
   const dateInputEl = useRef<HTMLInputElement | null>(null);
@@ -62,7 +68,8 @@ const Form: React.FC = () => {
         category: inputCategory,
         desc: inputDesc,
         pay: inputPayment,
-        shared: inputShared
+        shared: inputShared,
+        payer: inputPayer
       })
     );
     dispatch(currentSaved(null));
@@ -75,43 +82,51 @@ const Form: React.FC = () => {
 
   return (
     <form className="budget-form" onSubmit={handleSubmit}>
-      <input
-        className="budget-form__date"
-        type="date"
-        value={inputDate}
-        onChange={handleDateChange}
-        ref={dateInputEl}
-      ></input>
-      <input
-        className="budget-form__price"
-        type="text"
-        name="price"
-        value={inputPrice}
-        onChange={handlePriceChange}
-      ></input>
-      <select className="budget-form__category" value={inputCategory} onChange={handleCategoryChange}>
-        {categoryOptions}
-      </select>
-      <input
-        className="budget-form__desc"
-        type="text"
-        list="descOption"
-        name="desc"
-        value={inputDesc}
-        onChange={handleDescChange}
-      ></input>
-      <datalist id="descOption">
-        <option value="食費"></option>　<option value="生活雑貨"></option>　
-        <option value="Suica"></option>
-      </datalist>
-      <input className="budget-form__submit" type="submit" value="submit" />
-      <div className="budget-form__payment">
-        <label><input defaultChecked className="budget-form__radio" name="payment" type="radio" value="credit" onChange={handlePaymentChange} />クレジット</label>
-        <label><input className="budget-form__radio" name="payment" type="radio" value="cash" onChange={handlePaymentChange} />現金</label>
+      <div className="budget-form__row">
+        <input
+          className="budget-form__date"
+          type="date"
+          value={inputDate}
+          onChange={handleDateChange}
+          ref={dateInputEl}
+        ></input>
+        <input
+          className="budget-form__price"
+          type="text"
+          name="price"
+          value={inputPrice}
+          onChange={handlePriceChange}
+        ></input>
+        <select className="budget-form__category" value={inputCategory} onChange={handleCategoryChange}>
+          {categoryOptions}
+        </select>
+        <select className="budget-form__payer" value={inputPayer} onChange={handlePayerChange}>
+          <option value="person1">Person1</option>
+          <option value="person2">Person2</option>
+        </select>
+        <input className="budget-form__submit" type="submit" value="submit" />
+        <div className="budget-form__payment">
+          <label><input defaultChecked className="budget-form__radio" name="payment" type="radio" value="credit" onChange={handlePaymentChange} />クレジット</label>
+          <label><input className="budget-form__radio" name="payment" type="radio" value="cash" onChange={handlePaymentChange} />現金</label>
+        </div>
+        <div className="budget-form__shared">
+          <input type="checkbox" checked={inputShared} onChange={handleSharedChange}></input>
+          共同支出
+        </div>
       </div>
-      <div className="budget-form__shared">
-        <input type="checkbox" checked={inputShared} onChange={handleSharedChange}></input>
-        共同支出
+      <div className="budget-form__row">
+        <input
+          className="budget-form__desc"
+          type="text"
+          list="descOption"
+          name="desc"
+          value={inputDesc}
+          onChange={handleDescChange}
+        ></input>
+        <datalist id="descOption">
+          <option value="食費"></option>　<option value="生活雑貨"></option>　
+          <option value="Suica"></option>
+        </datalist>
       </div>
     </form>
   );
