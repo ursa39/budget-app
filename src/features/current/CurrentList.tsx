@@ -23,7 +23,7 @@ function CurrentList() {
   const [currentCategory, setCurrentCategory] = useState("all");
   const [currentPayment, setCurrentPayment] = useState("all");
   const [currentPayer, setCurrentPayer] = useState("all");
-  const [sharedOnly, setSharedOnly] = useState(false);
+  const [currentSharing, setSharing] = useState("all");
 
   const categoryFilter = (items: Record[]) => {
     if (currentCategory === "all") return items;
@@ -44,12 +44,13 @@ function CurrentList() {
     });
   };
 
-  const sharedFilter = (items: Record[]) => {
-    if (!sharedOnly) return items;
+  const sharingFilter = (items: Record[]) => {
+    if (currentSharing === "all") return items;
+    if (currentSharing === "mine") return items.filter((item) => !item.shared);
     return items.filter((item) => item.shared);
   }
 
-  const list = payerFilter(sharedFilter(paymentFilter(categoryFilter(useSelector((state) => state.current)))));
+  const list = payerFilter(sharingFilter(paymentFilter(categoryFilter(useSelector((state) => state.current)))));
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setCurrentCategory(e.target.value);
@@ -68,8 +69,8 @@ function CurrentList() {
     dispatch(currentSaved(null));
   }
 
-  const handleShared = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSharedOnly(e.target.checked);
+  const handleSharing = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSharing(e.target.value);
   }
 
   const items = list.map((item, index) => {
@@ -123,7 +124,21 @@ function CurrentList() {
     <Fragment>
       <div className="budget-list__header">
         <span className="price-sum">合計: ¥{priceSum.toLocaleString()}</span>
-        <span className="shared-only">共同支出のみ<input type="checkbox" checked={sharedOnly} onChange={handleShared}></input></span>
+        <select
+          className={'budget-sharing__select'}
+          value={currentSharing}
+          onChange={handleSharing}
+        >
+          <option className="budget-sharing__option" value="all">
+            全ての支出区分
+          </option>
+          <option className="budget-sharing__option" value="mine">
+            自分の支出
+          </option>
+          <option className="budget-sharing__option" value="shared">
+            共同支出
+          </option>
+        </select>
         <select
           className={`budget-payer__select ${currentPayer}`}
           value={currentPayer}

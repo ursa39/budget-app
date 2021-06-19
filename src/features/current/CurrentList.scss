@@ -105,8 +105,10 @@
 
 .budget-category,
 .budget-payment,
-.budget-payer {
+.budget-payer,
+.budget-sharing {
   &__select {
+    padding-right: 20px;
     display: inline-block;
     margin: 0 0 0 10px;
     background: #f0f0f0;
