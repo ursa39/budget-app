@@ -108,7 +108,7 @@ const Form: React.FC = () => {
         </select>
         <input className="budget-form__submit" type="submit" value="submit" />
         <div className="budget-form__payment">
-          <label><input defaultChecked className="budget-form__radio" name="payment" type="radio" value="credit" checked={inputPayment === 'credit'} onChange={handlePaymentChange} />クレジット</label>
+          <label><input className="budget-form__radio" name="payment" type="radio" value="credit" checked={inputPayment === 'credit'} onChange={handlePaymentChange} />クレジット</label>
           <label><input className="budget-form__radio" name="payment" type="radio" value="cash" checked={inputPayment === 'cash'} onChange={handlePaymentChange} />現金</label>
         </div>
         <div className="budget-form__shared">
