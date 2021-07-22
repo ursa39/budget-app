@@ -18,6 +18,9 @@ const currentSlice = createSlice({
     currentSaved(state, action) {
       localStorage.setItem('currentList', JSON.stringify(state));
     },
+    currentUpdated(state, action) {
+      return action.payload
+    },
     currentDeleted(state, action) {
       const deleteTargetIndex = state.findIndex((item: Record) => item.id === action.payload);
       state.splice(deleteTargetIndex, 1);
@@ -25,5 +28,5 @@ const currentSlice = createSlice({
   },
 })
 
-export const { currentAdded, currentSaved, currentDeleted } = currentSlice.actions;
+export const { currentAdded, currentSaved, currentUpdated, currentDeleted } = currentSlice.actions;
 export default currentSlice.reducer;

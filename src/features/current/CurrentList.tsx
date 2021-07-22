@@ -1,12 +1,13 @@
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 import { DateTime } from "luxon";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { currentDeleted, currentSaved } from "./currentSlice";
+import { currentDeleted, currentSaved, currentUpdated } from "./currentSlice";
 import { categoryList } from "../../app/categoryList";
 import deleteIcon from "../../icons/icon-delete.svg";
 import creditcardIcon from "../../icons/icon-creditcard.svg";
+import {ReactComponent as SettledIcon} from '../../icons/icon-check.svg';
 import sharedIcon from "../../icons/shared.png";
 import { Record } from '../../app/types/Record';
 import "./CurrentList.scss";
@@ -49,8 +50,8 @@ function CurrentList() {
     if (currentSharing === "mine") return items.filter((item) => !item.shared);
     return items.filter((item) => item.shared);
   }
-
-  const list = payerFilter(sharingFilter(paymentFilter(categoryFilter(useSelector((state) => state.current)))));
+  const currentRecords = useSelector((state) => state.current)
+  const list = payerFilter(sharingFilter(paymentFilter(categoryFilter(currentRecords))));
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setCurrentCategory(e.target.value);
@@ -73,6 +74,16 @@ function CurrentList() {
     setSharing(e.target.value);
   }
 
+  const handleSettled = (e: React.MouseEvent<HTMLSpanElement>) => {
+    const id = e.currentTarget.getAttribute('data-index')!
+    const recordsCopy = currentRecords.map(record => ({...record}))
+    const targetItem = recordsCopy.find(record => record.id === id)!
+    targetItem.settled = !targetItem.settled
+    dispatch(
+      currentUpdated(recordsCopy)
+    );
+  }
+
   const items = list.map((item, index) => {
     const date = DateTime.fromFormat(item.date, "yyyy-MM-dd").toFormat("MM/dd");
     const category = categoryList.find(
@@ -85,8 +96,19 @@ function CurrentList() {
     const sharedIconElement = item.shared
       ? <img className="budget-list__shared" src={sharedIcon} alt="sharedIcon"></img>
       : '';
+
     return (
       <li className="budget-list__item" key={index}>
+        <span
+          className={[
+            "budget-list__settled",
+            item.settled ? "settled" : "",
+          ].join(" ")}
+          onClick={handleSettled}
+          data-index={item.id}
+        >
+          <SettledIcon />
+        </span>
         <span className="budget-list__date">{date}</span>
         <span className="budget-list__price">
           ¥{parseInt(item.price).toLocaleString()}
@@ -97,7 +119,10 @@ function CurrentList() {
         <span className={`budget-list__category ${item.category}`}>
           {category!.name}
         </span>
-        <span className="budget-list__delete" onClick={() => handleDelete(item.id)}>
+        <span
+          className="budget-list__delete"
+          onClick={() => handleDelete(item.id)}
+        >
           <img src={deleteIcon} alt="delete"></img>
         </span>
       </li>

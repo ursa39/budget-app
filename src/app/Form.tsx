@@ -65,6 +65,7 @@ const Form: React.FC = () => {
     dispatch(
       currentAdded({
         id: nanoid(),
+        settled: false,
         date: inputDate,
         price: inputPrice,
         category: inputCategory,
